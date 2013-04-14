@@ -11,10 +11,10 @@
 #import "ABViewPool.h"
 #import "ABCalendarPicker.h"
 
-#define UP_ARROW_STRING @"▲"
-#define DOWN_ARROW_STRING @"▼"
 #define LEFT_ARROW_STRING @"◀"
 #define RIGHT_ARROW_STRING @"▶"
+#define UP_ARROW_STRING LEFT_ARROW_STRING //@"▲"
+#define DOWN_ARROW_STRING RIGHT_ARROW_STRING //@"▼"
 
 @interface ABCalendarPicker()
 @property (strong,nonatomic) NSMutableArray * controls;
@@ -306,7 +306,7 @@
                           withText:UP_ARROW_STRING
                            fastTap:@selector(leftButtonClicked:)
                            deepTap:@selector(leftDeepPress:)];
-        [self addSubview:_leftArrow];
+        //[self addSubview:_leftArrow];
     }
     return _leftArrow;
 }
@@ -318,8 +318,8 @@
         _longLeftArrow = [UIButton buttonWithType:UIButtonTypeCustom];
         [self configureArrowButton:_longLeftArrow
                           withText:LEFT_ARROW_STRING
-                           fastTap:@selector(longLeftButtonClicked:)
-                           deepTap:@selector(longLeftDeepPress:)];
+                           fastTap:@selector(leftButtonClicked:)
+                           deepTap:@selector(leftDeepPress:)];
         [self addSubview:_longLeftArrow];
     }
     return _longLeftArrow;
@@ -334,7 +334,7 @@
                           withText:DOWN_ARROW_STRING
                            fastTap:@selector(rightButtonClicked:)
                            deepTap:@selector(rightDeepPress:)];
-        [self addSubview:_rightArrow];
+        //[self addSubview:_rightArrow];
     }
     return _rightArrow;
 }
@@ -346,8 +346,8 @@
         _longRightArrow = [UIButton buttonWithType:UIButtonTypeCustom];
         [self configureArrowButton:_longRightArrow
                           withText:RIGHT_ARROW_STRING
-                           fastTap:@selector(longRightButtonClicked:)
-                           deepTap:@selector(longRightDeepPress:)];
+                           fastTap:@selector(rightButtonClicked:)
+                           deepTap:@selector(rightDeepPress:)];
         [self addSubview:_longRightArrow];
     }
     return _longRightArrow;
@@ -562,91 +562,91 @@
 }
 
 /*
-- (void)tilesTouchedAt:(CGPoint)point moved:(BOOL)moved
-{
-    for (int i = 0 ; i < [self.controls count]; i++)
-    {
-        NSArray * arr = [self.controls objectAtIndex:i];
-        for (int j = 0; j < arr.count; j++) 
-        {
-            UIControl * control = [arr objectAtIndex:j];
-            
-            if (CGRectContainsPoint(control.frame, point))
-            {
-                NSDate * date = [self.currentProvider dateForRow:i andColumn:j];
-                
-                if (control.enabled)
-                {
-                    if (control.highlighted)
-                    {
-                        if (!moved)
-                            self.controlTouchBegin = control;
-                    }
-                    else 
-                    {
-                        // Lets highlight
-                        self.highlightedDate = date;
-                        self.highlightedControl.highlighted = NO;
-                        self.highlightedControl = control;
-                        self.highlightedControl.highlighted = YES;
-                        
-                        [self.oldTileView bringSubviewToFront:self.selectedControl];
-                        [self.oldTileView bringSubviewToFront:control];
-                    }
-                }
-                else
-                {
-                    // Lets segue prev or next
-                    ABCalendarPickerAnimation animation = (i == 0) ? [self.currentProvider animationForPrev] : [self.currentProvider animationForNext];
-
-                    self.highlightedDate = date;
-                    if ([self.currentProvider rowsCount] == 1)
-                        [self changeStateTo:self.currentState fromState:self.currentState animation:ABCalendarPickerAnimationTransition canDiffuse:1];
-                    else
-                        [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:[self.currentProvider canDiffuse]];
-                    return;
-                }
-            }
-        }
-    }
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
-    [self tilesTouchedAt:point moved:NO];
-}
-
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
-    [self tilesTouchedAt:point moved:YES];    
-}
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
-    
-    for (NSArray * arr in self.controls)
-    for (UIControl * control in arr)
-        if (CGRectContainsPoint(control.frame, point))
-        {
-            if (control == self.controlTouchBegin)
-            {
-                // Lets segue in
-                NSInteger index = [self.providers indexOfObject:self.currentProvider];
-                if (index > 0 && [self.providers objectAtIndex:index-1] != nil)
-                    [self setState:self.currentState-1 animated:YES];
-                else if (self.currentState == ABCalendarPickerStateWeekdays)
-                    [self setState:self.currentState+1 animated:YES];
-                self.controlTouchBegin = nil;
-            }
-            return;
-        }
-    
-    return;
-}
-*/
+ - (void)tilesTouchedAt:(CGPoint)point moved:(BOOL)moved
+ {
+ for (int i = 0 ; i < [self.controls count]; i++)
+ {
+ NSArray * arr = [self.controls objectAtIndex:i];
+ for (int j = 0; j < arr.count; j++)
+ {
+ UIControl * control = [arr objectAtIndex:j];
+ 
+ if (CGRectContainsPoint(control.frame, point))
+ {
+ NSDate * date = [self.currentProvider dateForRow:i andColumn:j];
+ 
+ if (control.enabled)
+ {
+ if (control.highlighted)
+ {
+ if (!moved)
+ self.controlTouchBegin = control;
+ }
+ else
+ {
+ // Lets highlight
+ self.highlightedDate = date;
+ self.highlightedControl.highlighted = NO;
+ self.highlightedControl = control;
+ self.highlightedControl.highlighted = YES;
+ 
+ [self.oldTileView bringSubviewToFront:self.selectedControl];
+ [self.oldTileView bringSubviewToFront:control];
+ }
+ }
+ else
+ {
+ // Lets segue prev or next
+ ABCalendarPickerAnimation animation = (i == 0) ? [self.currentProvider animationForPrev] : [self.currentProvider animationForNext];
+ 
+ self.highlightedDate = date;
+ if ([self.currentProvider rowsCount] == 1)
+ [self changeStateTo:self.currentState fromState:self.currentState animation:ABCalendarPickerAnimationTransition canDiffuse:1];
+ else
+ [self changeStateTo:self.currentState fromState:self.currentState animation:animation canDiffuse:[self.currentProvider canDiffuse]];
+ return;
+ }
+ }
+ }
+ }
+ }
+ 
+ - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+ {
+ CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
+ [self tilesTouchedAt:point moved:NO];
+ }
+ 
+ - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+ {
+ CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
+ [self tilesTouchedAt:point moved:YES];
+ }
+ 
+ - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+ {
+ CGPoint point = [[touches anyObject] locationInView:self.oldTileView];
+ 
+ for (NSArray * arr in self.controls)
+ for (UIControl * control in arr)
+ if (CGRectContainsPoint(control.frame, point))
+ {
+ if (control == self.controlTouchBegin)
+ {
+ // Lets segue in
+ NSInteger index = [self.providers indexOfObject:self.currentProvider];
+ if (index > 0 && [self.providers objectAtIndex:index-1] != nil)
+ [self setState:self.currentState-1 animated:YES];
+ else if (self.currentState == ABCalendarPickerStateWeekdays)
+ [self setState:self.currentState+1 animated:YES];
+ self.controlTouchBegin = nil;
+ }
+ return;
+ }
+ 
+ return;
+ }
+ */
 
 #pragma mark -
 #pragma mark Animation Functions
@@ -703,8 +703,8 @@
         //self.titleLabel.shadowColor = [UIColor whiteColor];
         self.titleLabel.shadowOffset = CGSizeMake(0, 1);
         self.titleLabel.font = (self.columnLabels.count == 0)
-                             ? [self.styleProvider titleFontForColumnTitlesInvisible]
-                             : [self.styleProvider titleFontForColumnTitlesVisible];
+        ? [self.styleProvider titleFontForColumnTitlesInvisible]
+        : [self.styleProvider titleFontForColumnTitlesVisible];
         //self.titleLabel.textColor = [UIColor colorWithRed:59/255. green:73/255. blue:88/255. alpha:1];
         //self.titleLabel.adjustsFontSizeToFitWidth = YES;
     }
@@ -756,7 +756,7 @@
             [self.longLeftArrow setTitle:UP_ARROW_STRING forState:UIControlStateNormal];
         else if ([provider animationForLongPrev] == ABCalendarPickerAnimationScrollLeft)
             [self.longLeftArrow setTitle:LEFT_ARROW_STRING forState:UIControlStateNormal];
-    
+        
         if ([provider animationForLongNext] == ABCalendarPickerAnimationScrollDown)
             [self.longRightArrow setTitle:DOWN_ARROW_STRING forState:UIControlStateNormal];
         else if ([provider animationForLongNext] == ABCalendarPickerAnimationScrollRight)
@@ -841,7 +841,7 @@
             
             CGFloat shift = (j < columnsCount - 1) ? 0 : (self.bounds.size.width + 1 - columnsCount*buttonWidth);
             control.frame = CGRectMake(j*buttonWidth-1, i*buttonHeight, buttonWidth+1+shift, buttonHeight+1);
-
+            
             control.enabled = ((controlState & UIControlStateDisabled) == 0);
             control.selected = ((controlState & UIControlStateSelected) != 0);
             control.highlighted = ((controlState & UIControlStateHighlighted) != 0);
@@ -850,7 +850,7 @@
                 self.selectedControl = control;
             if ((controlState & UIControlStateHighlighted) != 0)
                 self.highlightedControl = control;
-
+            
             [self.nowTileView addSubview:control];
             [[self.controls lastObject] addObject:control];
         }
@@ -1036,12 +1036,12 @@
 {
     return (animation == ABCalendarPickerAnimationScrollUp
             && direction == UISwipeGestureRecognizerDirectionDown)
-        || (animation == ABCalendarPickerAnimationScrollDown
-            && direction == UISwipeGestureRecognizerDirectionUp)
-        || (animation == ABCalendarPickerAnimationScrollLeft
-            && direction == UISwipeGestureRecognizerDirectionRight)
-        || (animation == ABCalendarPickerAnimationScrollRight
-            && direction == UISwipeGestureRecognizerDirectionLeft);
+    || (animation == ABCalendarPickerAnimationScrollDown
+        && direction == UISwipeGestureRecognizerDirectionUp)
+    || (animation == ABCalendarPickerAnimationScrollLeft
+        && direction == UISwipeGestureRecognizerDirectionRight)
+    || (animation == ABCalendarPickerAnimationScrollRight
+        && direction == UISwipeGestureRecognizerDirectionLeft);
 }
 
 - (void)anySwiped:(UISwipeGestureRecognizer *)gestureRecognizer
@@ -1086,7 +1086,7 @@
     if ([self animationEq:longNextAnimation toDirection:gestureRecognizer.direction])
     {
         UIControl * control = [[self.controls lastObject] lastObject];
-        canDiffuse = canDiffuse && !control.enabled;   
+        canDiffuse = canDiffuse && !control.enabled;
         self.highlightedDate = [self.currentProvider dateForLongNextAnimation];
         [self changeStateTo:self.currentState fromState:self.currentState animation:longNextAnimation canDiffuse:canDiffuse];
     }
@@ -1099,7 +1099,7 @@
         [[self.dotLabels objectAtIndex:0] removeFromSuperview];
         [self.dotLabels removeObjectAtIndex:0];
     }
-
+    
     [self.oldTileView removeFromSuperview];
     self.oldTileView = self.nowTileView;
     self.nowTileView = nil;
@@ -1154,7 +1154,7 @@
     
     CGFloat oldFrameBottom = self.frame.origin.y + self.frame.size.height;
     CGFloat newFrameHeight = 50.0 + buttonHeight*rowsCount + 1;
-
+    
     if (self.gradientBar == nil)
     {
         self.gradientBar = [[UIImageView alloc] initWithImage:[self imageNamed:@"GradientBar"]];
@@ -1202,7 +1202,7 @@
     self.nowTileView.autoresizesSubviews = NO;
     self.nowTileView.clipsToBounds = YES;
     self.nowTileView.opaque = NO;
-
+    
     // Updating all elements
     
     [self updateButtonsForProvider:provider andState:toState];
@@ -1216,7 +1216,7 @@
     {
         CGFloat oldFrameHeight = self.frame.size.height;
         self.frame = CGRectMake(self.frame.origin.x,
-                                self.bottomExpanding ? self.frame.origin.y : (oldFrameBottom - newFrameHeight), 
+                                self.bottomExpanding ? self.frame.origin.y : (oldFrameBottom - newFrameHeight),
                                 self.frame.size.width,
                                 newFrameHeight);
         self.mainTileView.frame = CGRectMake(0,50,self.frame.size.width,self.frame.size.height-50);
@@ -1225,11 +1225,11 @@
             if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:animateNewHeight:)])
                 [self.delegate calendarPicker:self animateNewHeight:newFrameHeight];
         }
-            
+        
         [self.mainTileView addSubview:self.nowTileView];
         self.previousState = self.currentState;
         self.currentState = toState;
-
+        
         [self animationDidStop:nil finished:nil context:nil];
         return;
     }
@@ -1241,7 +1241,7 @@
     
     UIView * fromView = self.oldTileView;
     UIView * toView = self.nowTileView;
-
+    
     NSInteger shift = 0;
     CGFloat duration = 0.3;
     switch (animation)
@@ -1308,7 +1308,7 @@
             [self.mainTileView insertSubview:toView atIndex:0];
             toView.center = CGPointMake(toView.center.x, toView.center.y + (shift-1)*buttonHeight);
             break;
-
+            
         case ABCalendarPickerAnimationScrollDownFor1Rows:
         case ABCalendarPickerAnimationScrollDownFor2Rows:
         case ABCalendarPickerAnimationScrollDownFor3Rows:
@@ -1321,13 +1321,13 @@
             [self.mainTileView insertSubview:toView atIndex:0];
             toView.center = CGPointMake(toView.center.x, toView.center.y - (shift-1)*buttonHeight);
             break;
-
+            
         default:
             toView.alpha = 0;
             [self.mainTileView insertSubview:toView atIndex:0];
             break;
     }
-     
+    
     CGFloat delay = 0.0;
     if (animation == ABCalendarPickerAnimationScrollUp
         || animation == ABCalendarPickerAnimationScrollDown
@@ -1347,7 +1347,7 @@
         toView.alpha = 1;
         fromView.alpha = 1;
     }
-
+    
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
@@ -1366,7 +1366,7 @@
             fromView.alpha = 0;
         }
     }
-
+    
     CGFloat oldFrameHeight = self.frame.size.height;
     self.frame = CGRectMake(self.frame.origin.x,
                             self.bottomExpanding ? self.frame.origin.y : (oldFrameBottom - newFrameHeight),
@@ -1378,7 +1378,7 @@
         if ([(id)self.delegate respondsToSelector:@selector(calendarPicker:animateNewHeight:)])
             [self.delegate calendarPicker:self animateNewHeight:newFrameHeight];
     }
-
+    
     switch (animation)
     {
         case ABCalendarPickerAnimationZoomOut:
@@ -1391,7 +1391,7 @@
                                  toView:toView
                            inParentView:self.mainTileView];
             break;
-        
+            
         case ABCalendarPickerAnimationScrollUp:
             [self animateScrollUpFromView:fromView
                                    toView:toView
@@ -1448,7 +1448,7 @@
         default:
             break;
     };
-
+    
     [UIView commitAnimations];
     
     [self.nowTileView setNeedsDisplay];
@@ -1481,7 +1481,7 @@
     self.monthsProvider = monthsProvider;
     self.yearsProvider = yearsProvider;
     self.erasProvider = erasProvider;
-
+    
     self.calendar = [[NSLocale currentLocale] objectForKey:NSLocaleCalendar];
     //self.calendar = [NSCalendar currentCalendar];//[[NSCalendar alloc] initWithCalendarIdentifier:calendarId];
     //self.calendar.firstWeekday = 2;
@@ -1574,7 +1574,7 @@
         }
     }
     
-
+    
     [self changeStateTo:state fromState:self.currentState animation:animation canDiffuse:canDiffuse];
 }
 

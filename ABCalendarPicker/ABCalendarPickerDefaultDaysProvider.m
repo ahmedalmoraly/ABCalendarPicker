@@ -27,6 +27,7 @@
         self.calendar = [NSCalendar currentCalendar];
         self.dateFormatter = [[NSDateFormatter alloc] init];
         self.dateFormatter.dateFormat = @"ccc";
+        self.dateFormatter.locale = [NSLocale currentLocale];
         self.dateFormatterTitle = [[NSDateFormatter alloc] init];
         self.dateFormatterTitle.dateFormat = [NSDateFormatter dateFormatFromTemplate:@"LLLL yyyy" options:0 locale:[NSLocale currentLocale]];
     }
@@ -52,7 +53,7 @@
     
     NSDateComponents * month = [[NSDateComponents alloc] init];
     month.month = 1;
-
+    
     NSDateComponents * mday = [[NSDateComponents alloc] init];
     mday.day = -1;
     
@@ -64,10 +65,10 @@
 }
 
 - (ABCalendarPickerAnimation)animationForPrev {
-    return ABCalendarPickerAnimationScrollUp;
+    return ABCalendarPickerAnimationScrollLeft;
 }
 - (ABCalendarPickerAnimation)animationForNext {
-    return ABCalendarPickerAnimationScrollDown;
+    return ABCalendarPickerAnimationScrollRight;
 }
 - (ABCalendarPickerAnimation)animationForZoomInToProvider:(id<ABCalendarPickerDateProviderProtocol>)provider {
     if (provider == nil)
@@ -79,24 +80,24 @@
 }
 
 - (ABCalendarPickerAnimation)animationForLongPrev {
-    return ABCalendarPickerAnimationScrollLeft;
+    return ABCalendarPickerAnimationScrollUp;
 }
 - (ABCalendarPickerAnimation)animationForLongNext {
-    return ABCalendarPickerAnimationScrollRight;
+    return ABCalendarPickerAnimationScrollDown;
 }
 
 - (NSDate*)dateForPrevAnimation
 {
     NSDateComponents * components = [[NSDateComponents alloc] init];
     components.month = -1;
-    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0];   
+    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0];
 }
 
 - (NSDate*)dateForNextAnimation
 {
     NSDateComponents * components = [[NSDateComponents alloc] init];
     components.month = 1;
-    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0]; 
+    return [self.calendar dateByAddingComponents:components toDate:[self.dateOwner highlightedDate] options:0];
 }
 
 - (NSDate*)dateForLongPrevAnimation
@@ -136,8 +137,8 @@
     return [self.dateFormatterTitle stringFromDate:[self.dateOwner highlightedDate]];
 }
 
-- (NSDate*)dateForRow:(NSInteger)row 
-            andColumn:(NSInteger)column 
+- (NSDate*)dateForRow:(NSInteger)row
+            andColumn:(NSInteger)column
 {
     NSInteger index = row*7 + column + 1;
     
@@ -154,8 +155,13 @@
 
 - (NSString*)labelForDate:(NSDate*)date
 {
-    NSUInteger day = [self.calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:date];
-    return [NSString stringWithFormat:@"%d", day, nil];
+    NSString *currentDateFormat = self.dateFormatter.dateFormat;
+    self.dateFormatter.dateFormat = @"d";
+    NSString *label = [self.dateFormatter stringFromDate:date];
+    self.dateFormatter.dateFormat = currentDateFormat;
+    return label;
+    //NSUInteger day = [self.calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSMonthCalendarUnit forDate:date];
+    //return [NSString stringWithFormat:@"%d", day, nil];
 }
 
 - (UIControlState)controlStateForDate:(NSDate*)date
@@ -177,17 +183,17 @@
     BOOL isHilighted = (currentDay == highlightedDay) && (currentMonth == highlightedMonth);
     
     return (isDisabled ? UIControlStateDisabled : 0)
-         | (isSelected ? UIControlStateSelected : 0)
-         | (isHilighted ? UIControlStateHighlighted : 0);
+    | (isSelected ? UIControlStateSelected : 0)
+    | (isHilighted ? UIControlStateHighlighted : 0);
 }
 
-- (NSString*)labelForRow:(NSInteger)row 
-               andColumn:(NSInteger)column                  
+- (NSString*)labelForRow:(NSInteger)row
+               andColumn:(NSInteger)column
 {
     return [self labelForDate:[self dateForRow:row andColumn:column]];
 }
 
-- (UIControlState)controlStateForRow:(NSInteger)row 
+- (UIControlState)controlStateForRow:(NSInteger)row
                            andColumn:(NSInteger)column
 {
     return [self controlStateForDate:[self dateForRow:row andColumn:column]];

@@ -42,9 +42,9 @@
 /// ----------------------------------------------------------------
 
 /** Delegate is needed for configuring and noticing calendars behavior. */
-@property (strong,nonatomic) id<ABCalendarPickerDelegateProtocol> delegate;
+@property (weak, nonatomic) id<ABCalendarPickerDelegateProtocol> delegate;
 /** Delegate is needed for displaying user information on calendar. */
-@property (strong,nonatomic) id<ABCalendarPickerDataSourceProtocol> dataSource;
+@property (weak, nonatomic) id<ABCalendarPickerDataSourceProtocol> dataSource;
 /** Flag means wich side of the view should grow: bottom or top. */
 @property (nonatomic) BOOL bottomExpanding;
 /** Flag means is swipe enabled for navigation. */
@@ -73,9 +73,9 @@
  
  For example, you can set first weekday to _monday_ this way:
  
-    NSCalendar * calendar = [NSCalendar currentCalendar];
-    [calendar setFirstWeekday:2];
-    calendarPicker.calendar = calendar;
+ NSCalendar * calendar = [NSCalendar currentCalendar];
+ [calendar setFirstWeekday:2];
+ calendarPicker.calendar = calendar;
  */
 @property (strong,nonatomic) NSCalendar * calendar;
 
