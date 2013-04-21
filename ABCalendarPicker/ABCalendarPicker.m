@@ -1167,7 +1167,7 @@
         self.mainTileView = [[UIView alloc] initWithFrame:CGRectMake(0,50,self.frame.size.width,self.frame.size.height-50)];
         self.mainTileView.userInteractionEnabled = NO;
         self.mainTileView.clipsToBounds = YES;
-        self.mainTileView.backgroundColor = [UIColor colorWithRed:164/255. green:167/255. blue:176/255. alpha:1.0];
+        self.mainTileView.backgroundColor = [UIColor blackColor];// [UIColor colorWithRed:164/255. green:167/255. blue:176/255. alpha:1.0];
         [self addSubview:self.mainTileView];
         
         UISwipeGestureRecognizer * topRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(anySwiped:)];
@@ -1467,7 +1467,7 @@
                 yearsProvider:(id<ABCalendarPickerDateProviderProtocol>)yearsProvider
                  erasProvider:(id<ABCalendarPickerDateProviderProtocol>)erasProvider
 {
-    self.backgroundColor = [UIColor colorWithRed:220/255. green:220/255. blue:220/255. alpha:1.0];
+    self.backgroundColor = [UIColor blackColor];// [UIColor colorWithRed:220/255. green:220/255. blue:220/255. alpha:1.0];
     self.bottomExpanding = YES;
     self.swipeNavigationEnabled = YES;
     self.deepPressingInProgress = NO;
@@ -1523,6 +1523,34 @@
 {
     if (self = [super initWithCoder:aDecoder])
         [self initWithDefaultProviders];
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame styleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler
+{
+    if (self = [super initWithFrame:frame])
+    {
+        [self initWithStyleProvider:styler
+                   weekdaysProvider:[[ABCalendarPickerDefaultTripleWeekdaysProvider alloc] init]
+                       daysProvider:[[ABCalendarPickerDefaultDaysProvider alloc] init]
+                     monthsProvider:[[ABCalendarPickerDefaultSeasonedMonthsProvider alloc] init]
+                      yearsProvider:[[ABCalendarPickerDefaultYearsProvider alloc] init]
+                       erasProvider:nil];
+    }
+    return self;
+}
+
+-(id)initWithStyleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler
+{
+    if (self = [super init])
+    {
+        [self initWithStyleProvider:styler
+                   weekdaysProvider:[[ABCalendarPickerDefaultTripleWeekdaysProvider alloc] init]
+                       daysProvider:[[ABCalendarPickerDefaultDaysProvider alloc] init]
+                     monthsProvider:[[ABCalendarPickerDefaultSeasonedMonthsProvider alloc] init]
+                      yearsProvider:[[ABCalendarPickerDefaultYearsProvider alloc] init]
+                       erasProvider:nil];
+    }
     return self;
 }
 

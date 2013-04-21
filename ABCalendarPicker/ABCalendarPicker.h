@@ -100,4 +100,8 @@
 
 - (void)setHighlightedAndSectedDate:(NSDate *)date animated:(BOOL)animated;
 
+-(id)initWithStyleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler;
+- (id)initWithFrame:(CGRect)frame styleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler;
+
+
 @end
