@@ -11,10 +11,10 @@
 #import "ABViewPool.h"
 #import "ABCalendarPicker.h"
 
-#define UP_ARROW_STRING @"▲"
-#define DOWN_ARROW_STRING @"▼"
 #define LEFT_ARROW_STRING @"◀"
 #define RIGHT_ARROW_STRING @"▶"
+#define UP_ARROW_STRING LEFT_ARROW_STRING //@"▲"
+#define DOWN_ARROW_STRING RIGHT_ARROW_STRING //@"▼"
 
 @interface ABCalendarPicker()
 @property (strong,nonatomic) NSMutableArray * controls;
@@ -319,7 +319,7 @@
                           withText:UP_ARROW_STRING
                            fastTap:@selector(leftButtonClicked:)
                            deepTap:@selector(leftDeepPress:)];
-        [self addSubview:_leftArrow];
+        //[self addSubview:_leftArrow];
     }
     return _leftArrow;
 }
@@ -331,8 +331,8 @@
         _longLeftArrow = [UIButton buttonWithType:UIButtonTypeCustom];
         [self configureArrowButton:_longLeftArrow
                           withText:LEFT_ARROW_STRING
-                           fastTap:@selector(longLeftButtonClicked:)
-                           deepTap:@selector(longLeftDeepPress:)];
+                           fastTap:@selector(leftButtonClicked:)
+                           deepTap:@selector(leftDeepPress:)];
         [self addSubview:_longLeftArrow];
     }
     return _longLeftArrow;
@@ -347,7 +347,7 @@
                           withText:DOWN_ARROW_STRING
                            fastTap:@selector(rightButtonClicked:)
                            deepTap:@selector(rightDeepPress:)];
-        [self addSubview:_rightArrow];
+        //[self addSubview:_rightArrow];
     }
     return _rightArrow;
 }
@@ -359,8 +359,8 @@
         _longRightArrow = [UIButton buttonWithType:UIButtonTypeCustom];
         [self configureArrowButton:_longRightArrow
                           withText:RIGHT_ARROW_STRING
-                           fastTap:@selector(longRightButtonClicked:)
-                           deepTap:@selector(longRightDeepPress:)];
+                           fastTap:@selector(rightButtonClicked:)
+                           deepTap:@selector(rightDeepPress:)];
         [self addSubview:_longRightArrow];
     }
     return _longRightArrow;
@@ -1188,7 +1188,7 @@
         self.mainTileView = [[UIView alloc] initWithFrame:CGRectMake(0,50,self.frame.size.width,self.frame.size.height-50)];
         self.mainTileView.userInteractionEnabled = NO;
         self.mainTileView.clipsToBounds = YES;
-        self.mainTileView.backgroundColor = [UIColor colorWithRed:164/255. green:167/255. blue:176/255. alpha:1.0];
+        self.mainTileView.backgroundColor = [UIColor clearColor];// [UIColor colorWithRed:164/255. green:167/255. blue:176/255. alpha:1.0];
         [self addSubview:self.mainTileView];
         
         UISwipeGestureRecognizer * topRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(anySwiped:)];
@@ -1488,7 +1488,7 @@
                 yearsProvider:(id<ABCalendarPickerDateProviderProtocol>)yearsProvider
                  erasProvider:(id<ABCalendarPickerDateProviderProtocol>)erasProvider
 {
-    self.backgroundColor = [UIColor colorWithRed:220/255. green:220/255. blue:220/255. alpha:1.0];
+    self.backgroundColor = [UIColor clearColor];// [UIColor colorWithRed:220/255. green:220/255. blue:220/255. alpha:1.0];
     self.bottomExpanding = YES;
     self.swipeNavigationEnabled = YES;
     self.deepPressingInProgress = NO;
