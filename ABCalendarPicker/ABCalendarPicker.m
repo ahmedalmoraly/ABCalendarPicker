@@ -1547,6 +1547,34 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame styleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler
+{
+    if (self = [super initWithFrame:frame])
+    {
+        [self initWithStyleProvider:styler
+                   weekdaysProvider:[[ABCalendarPickerDefaultTripleWeekdaysProvider alloc] init]
+                       daysProvider:[[ABCalendarPickerDefaultDaysProvider alloc] init]
+                     monthsProvider:[[ABCalendarPickerDefaultSeasonedMonthsProvider alloc] init]
+                      yearsProvider:[[ABCalendarPickerDefaultYearsProvider alloc] init]
+                       erasProvider:nil];
+    }
+    return self;
+}
+
+-(id)initWithStyleProvider:(id<ABCalendarPickerStyleProviderProtocol>)styler
+{
+    if (self = [super init])
+    {
+        [self initWithStyleProvider:styler
+                   weekdaysProvider:[[ABCalendarPickerDefaultTripleWeekdaysProvider alloc] init]
+                       daysProvider:[[ABCalendarPickerDefaultDaysProvider alloc] init]
+                     monthsProvider:[[ABCalendarPickerDefaultSeasonedMonthsProvider alloc] init]
+                      yearsProvider:[[ABCalendarPickerDefaultYearsProvider alloc] init]
+                       erasProvider:nil];
+    }
+    return self;
+}
+
 #pragma mark -
 #pragma mark Public Methods
 
